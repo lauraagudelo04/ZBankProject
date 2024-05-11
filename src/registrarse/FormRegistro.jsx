@@ -5,8 +5,7 @@ import { divisas } from "../../models/datosFormulario";
 import DatosUsuario from "../formulario/DatosUsuario";
 import { postModel } from "../../models/postModel";
 import {enviarDatos} from '../../services/ApiService'
-import "./Formulario.css";
-
+import "./Formulario.css"
 function FormRegistro() {
   
     const [formValues, setFormValues] = useState(postModel)
