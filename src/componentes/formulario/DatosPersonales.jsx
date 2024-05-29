@@ -1,33 +1,56 @@
-import React,{useState}from "react";
+import React, { useState } from "react";
 import { Col, Form, Row } from "react-bootstrap";
 import { tiposDocumentos } from "../../models/datosFormulario";
 
 function DatosPersonales({ data, transferenciaDatos }) {
   const [emailError, setEmailError] = useState("");
+  const [docError, setDocError] = useState("");
 
   const items = data;
+
   const updateValuesForm = (e) => {
-    const copyState = { ...items };
     const { id, value } = e.target;
-    copyState[id] = value;    
-    transferenciaDatos(copyState);
-    if (id === "correo" && validateEmail(value)) {
-      setEmailError("");
+    const copyState = { ...items };
+    
+    if (id === "correo" && validateEmail(value) === false) {
+      setEmailError('El correo actual no cuenta con la estructura requerida: Ejemplo@ejemplo.com ')
+    }else {
+      setEmailError('')
     }
+
+    if (id === "numeroDocumento" && validateDoc(value) === false) {
+      setDocError("El número de documento");
+    }else {
+      setDocError('')
+    }
+
+    copyState[id] = value;
+    transferenciaDatos(copyState);
   };
+
   const validateEmail = (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
   };
 
+  const validateDoc = (doc) => {
+    // Verificar que el número de documento sea un número positivo sin caracteres especiales
+    const docRegex = /^\d+$/;
+    return docRegex.test(doc) && doc >= 0;
+  };
 
-  const validatePositiveInteger = (value) => {
-    return /^\d+$/.test(value); 
-}
+
+  const handleKeyDown = (e) => {
+    const key = e.key;
+    // Permitir solo teclas numéricas, teclas de control, y las necesarias para la edición (como Backspace)
+    if (!/^[0-9]$/.test(key) && !["Backspace", "ArrowLeft", "ArrowRight", "Delete"].includes(key)) {
+      e.preventDefault();
+    }
+  };
 
   return (
     <React.Fragment>
-      <Row  className="mb-3">
+      <Row className="mb-3">
         <Col md={6}>
           <Form.Text className="form-text-content">Nombre Completo</Form.Text>
           <Form.Control
@@ -46,8 +69,8 @@ function DatosPersonales({ data, transferenciaDatos }) {
             onChange={(e) => updateValuesForm(e)}
           />
         </Col>
-      </Row >
-      <Row  className="mb-3">
+      </Row>
+      <Row className="mb-3">
         <Col md={6}>
           <Form.Text className="form-text-content">Tipo de documento</Form.Text>
           <Form.Select id="tipoDocumento" onChange={(e) => updateValuesForm(e)}>
@@ -60,34 +83,32 @@ function DatosPersonales({ data, transferenciaDatos }) {
         </Col>
         <Col md={6}>
           <Form.Text className="form-text-content">Numero de documento</Form.Text>
-          <Form.Control id="numeroDocumento" type="number" min="0" 
-          required onChange={(e) => updateValuesForm(e)}  />
+          <Form.Control
+            id="numeroDocumento"
+            type="number"
+            min="0"
+            required
+            onKeyDown={handleKeyDown}
+            onChange={(e) =>updateValuesForm(e)}
+          />
+           {docError && <div style={{ color: "red", fontSize: 12 }}>{docError}</div>}
         </Col>
+
       </Row>
-      <Row  className="mb-3">
+      <Row className="mb-3">
         <Col md={12}>
           <Form.Text className="form-text-content">Correo electrónico</Form.Text>
           <Form.Control
             id="correo"
             type="email"
             required
-            onChange={(e) => {
-              const email = e.target.value;
-              if (validateEmail(email)) {
-                updateValuesForm(e);
-              } else {
-                setEmailError(
-                  "El correo no cumple con la estructura necesaria: ejemplo@ejemplo.com"
-                );
-              }
-            }}
+            onChange={(e) => updateValuesForm(e)}
           />
-          {emailError && <div style={{ color: "white" }}>{emailError}</div>}
+          {emailError && <div style={{ color: "red", fontSize: 12 }}>{emailError}</div>}
         </Col>
       </Row>
     </React.Fragment>
   );
 }
-
 
 export default DatosPersonales;

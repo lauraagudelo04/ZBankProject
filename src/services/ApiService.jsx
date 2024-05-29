@@ -3,7 +3,7 @@ import { postMethodUrl } from "../models/endpointDirectory";
 
 
 export const enviarDatos = async (data) => {
-  const url = postMethodUrl + '9091/api/Resgistrar'
+  const url = postMethodUrl + '8080/api/v1/persona/registrar'
   try {
     console.log(data)
     const respuesta = await axios.post(url, data);
