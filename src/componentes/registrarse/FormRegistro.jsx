@@ -14,16 +14,19 @@ function FormRegistro() {
     const [disableButton, setDisableButton] = useState(false)
 
     useEffect(() => {
+
       const { nombre, apellido, correo, divisa, clave, tipoDocumento, numeroDocumento, nombreUsuario } = formValues;  
       const allFieldsFilled = [nombre, apellido, correo, divisa, clave, tipoDocumento, numeroDocumento, nombreUsuario].every(value => value !== '');
       const passwordPattern =  /^(?=.*[A-Z])(?=.*\d)(?=.*[^\w])[A-Za-z\d\W]{8,30}$/;
       const isValidPassword = passwordPattern.test(clave) && clave.length >= 8 && clave.length <= 30
       const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
       const isEmailValid = emailPattern.test(correo)
-      setDisableButton(!(allFieldsFilled && isValidPassword && isEmailValid))
+      const usernamePattern=/^[a-zA-Z0-9]{1,25}$/;
+      const isValidUsername = usernamePattern.test(nombreUsuario);
+      setDisableButton(!(allFieldsFilled && isValidPassword && isEmailValid && isValidUsername))
     }, [formValues])
 
-    console.log(formValues.numeroDocumento)
+    //console.log(formValues.numeroDocumento)
 
     const handleValues = (data) => {
         setFormValues({...formValues, ...data})

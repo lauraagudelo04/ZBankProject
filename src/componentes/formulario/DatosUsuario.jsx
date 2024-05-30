@@ -4,6 +4,8 @@ import { Col, Form, Row } from 'react-bootstrap';
 
 function DatosUsuario({ data, transferenciaDatos }) {
   const [passwordError, setPasswordError] = useState("");
+  const [usernameError, setUsernameError] = useState("");
+
   const items = data;
 
   const updateValuesForm = (e) => {
@@ -16,6 +18,16 @@ function DatosUsuario({ data, transferenciaDatos }) {
       setPasswordError('')
     }
 
+    if (id === "nombreUsuario") {
+      if (value.length > 25) {
+        setUsernameError("El nombre de usuario no puede exceder los 25 caracteres.");
+      } else if (!validateUsername(value)) {
+        setUsernameError("El nombre de usuario no cumple con los caracteres permitidos.");
+      } else {
+        setUsernameError('');
+      }
+    }
+
     copyState[id] = value;
     transferenciaDatos(copyState);
   };
@@ -26,13 +38,33 @@ function DatosUsuario({ data, transferenciaDatos }) {
     return passwordRegex.test(password);
   };
 
+  const validateUsername=(username)=>{
+    const usernameRegex = /^[a-zA-Z0-9]{1,25}$/;
+    return usernameRegex.test(username);
+  }
+
+  const handleKeyDown = (e) => {
+    const key = e.key;
+    if (e.target.id === "nombreUsuario") {
+      if (!/^[a-zA-Z0-9]$/.test(key) && !["Backspace", "ArrowLeft", "ArrowRight", "Delete"].includes(key)) {
+        e.preventDefault();
+      }
+    } else if (!/^[0-9]$/.test(key) && !["Backspace", "ArrowLeft", "ArrowRight", "Delete"].includes(key)) {
+      e.preventDefault();
+    }
+  };
 
   return (
     <React.Fragment>
       <Row  className="mb-3">
         <Col md={6}>
           <Form.Text className="form-text-content">Nombre de usuario</Form.Text>
-          <Form.Control id="nombreUsuario" type="text" required onChange={(e) => updateValuesForm(e)}/>
+          <Form.Control id="nombreUsuario" type="text"
+           required 
+          onKeyDown={handleKeyDown}
+          onChange={(e) => 
+          updateValuesForm(e)}/>
+          {usernameError && <div style={{ color: "red", fontSize: 12 }}>{usernameError}</div>}
         </Col>
         <Col md={6}>
           <Form.Text className="form-text-content">Contraseña</Form.Text>

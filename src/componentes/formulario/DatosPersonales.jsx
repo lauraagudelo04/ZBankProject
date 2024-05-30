@@ -1,17 +1,17 @@
 import React, { useState } from "react";
 import { Col, Form, Row } from "react-bootstrap";
 import { tiposDocumentos } from "../../models/datosFormulario";
+import { set } from "react-hook-form";
 
 function DatosPersonales({ data, transferenciaDatos }) {
   const [emailError, setEmailError] = useState("");
   const [docError, setDocError] = useState("");
-
   const items = data;
 
   const updateValuesForm = (e) => {
     const { id, value } = e.target;
     const copyState = { ...items };
-    
+
     if (id === "correo" && validateEmail(value) === false) {
       setEmailError('El correo actual no cuenta con la estructura requerida: Ejemplo@ejemplo.com ')
     }else {
@@ -39,7 +39,6 @@ function DatosPersonales({ data, transferenciaDatos }) {
     return docRegex.test(doc) && doc >= 0;
   };
 
-
   const handleKeyDown = (e) => {
     const key = e.key;
     // Permitir solo teclas numéricas, teclas de control, y las necesarias para la edición (como Backspace)
@@ -47,6 +46,17 @@ function DatosPersonales({ data, transferenciaDatos }) {
       e.preventDefault();
     }
   };
+
+  const handleKeyDownOnlyLettersAndNumbers = (e) => {
+    const key = e.key;
+    const allowedKeys = ["Backspace", "ArrowLeft", "ArrowRight", "Delete"];
+    const regex = /^[a-zA-Z0-9\sñÑ]$/; // Letras, números, espacios, y ñ
+
+    if (!regex.test(key) && !allowedKeys.includes(key)) {
+      e.preventDefault();
+    }
+  };
+  
 
   return (
     <React.Fragment>
@@ -57,8 +67,10 @@ function DatosPersonales({ data, transferenciaDatos }) {
             type="text"
             id="nombre"
             required
+            onKeyDown={handleKeyDownOnlyLettersAndNumbers }
             onChange={(e) => updateValuesForm(e)}
           />
+          
         </Col>
         <Col md={6}>
           <Form.Text className="form-text-content">Apellidos</Form.Text>
@@ -66,8 +78,10 @@ function DatosPersonales({ data, transferenciaDatos }) {
             type="text"
             id="apellido"
             required
+            onKeyDown={handleKeyDownOnlyLettersAndNumbers }
             onChange={(e) => updateValuesForm(e)}
           />
+           
         </Col>
       </Row>
       <Row className="mb-3">
