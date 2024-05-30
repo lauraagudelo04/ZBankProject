@@ -23,7 +23,11 @@ function FormRegistro() {
       const isEmailValid = emailPattern.test(correo)
       const usernamePattern=/^[a-zA-Z0-9]{1,25}$/;
       const isValidUsername = usernamePattern.test(nombreUsuario);
-      setDisableButton(!(allFieldsFilled && isValidPassword && isEmailValid && isValidUsername))
+      const namePattern= /^[a-zA-Z0-9\s]{1,20}$/; 
+      const lastNamePattern=  /^[a-zA-Z0-9\s]{1,20}$/; 
+      const isValidName=namePattern.test(nombre) && nombre.length<=20;
+      const isValidLastName=lastNamePattern.test(apellido) && apellido.length<=20;
+      setDisableButton(!(allFieldsFilled && isValidPassword && isEmailValid && isValidUsername && isValidName && isValidLastName))
     }, [formValues])
 
     //console.log(formValues.numeroDocumento)
@@ -57,7 +61,6 @@ function FormRegistro() {
       }
     }
    
-    
   return (
     <Card className="container">
       <Form >

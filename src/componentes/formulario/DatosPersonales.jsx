@@ -6,6 +6,8 @@ import { set } from "react-hook-form";
 function DatosPersonales({ data, transferenciaDatos }) {
   const [emailError, setEmailError] = useState("");
   const [docError, setDocError] = useState("");
+  const[nameError, setNameError]=useState("");
+  const[lastNameError, setLastNameError]=useState("");
   const items = data;
 
   const updateValuesForm = (e) => {
@@ -17,6 +19,27 @@ function DatosPersonales({ data, transferenciaDatos }) {
     }else {
       setEmailError('')
     }
+
+    if (id === "nombre") {
+      if (value.length > 20) {
+        setNameError("El nombre no puede exceder los 20 caracteres.");
+      } else if (!validateName(value)) {
+        setNameError("El nombre no cumple con los caracteres permitidos.");
+      } else {
+        setNameError('');
+      }
+    }
+
+    if (id === "apellido") {
+      if (value.length > 20) {
+        setLastNameError("El apellido no puede exceder los 20 caracteres.");
+      } else if (!validateLastName(value)) {
+        setLastNameError("El apellido no cumple con los caracteres permitidos.");
+      } else {
+        setLastNameError('');
+      }
+    }
+
 
     if (id === "numeroDocumento" && validateDoc(value) === false) {
       setDocError("El número de documento");
@@ -38,6 +61,17 @@ function DatosPersonales({ data, transferenciaDatos }) {
     const docRegex = /^\d+$/;
     return docRegex.test(doc) && doc >= 0;
   };
+
+  const validateName = (name) => {
+    const nameRegex = /^[a-zA-Z0-9\s]{1,20}$/; 
+    return nameRegex.test(name);
+  };
+  
+  const validateLastName = (lastName) => {
+    const lastNameRegex = /^[a-zA-Z0-9\s]{1,50}$/;
+    return lastNameRegex.test(lastName);
+  };
+  
 
   const handleKeyDown = (e) => {
     const key = e.key;
@@ -70,7 +104,7 @@ function DatosPersonales({ data, transferenciaDatos }) {
             onKeyDown={handleKeyDownOnlyLettersAndNumbers }
             onChange={(e) => updateValuesForm(e)}
           />
-          
+           {nameError && <div style={{ color: "red", fontSize: 12 }}>{nameError}</div>}
         </Col>
         <Col md={6}>
           <Form.Text className="form-text-content">Apellidos</Form.Text>
@@ -81,7 +115,7 @@ function DatosPersonales({ data, transferenciaDatos }) {
             onKeyDown={handleKeyDownOnlyLettersAndNumbers }
             onChange={(e) => updateValuesForm(e)}
           />
-           
+          {lastNameError && <div style={{ color: "red", fontSize: 12 }}>{lastNameError}</div>} 
         </Col>
       </Row>
       <Row className="mb-3">
