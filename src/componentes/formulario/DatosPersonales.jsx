@@ -41,10 +41,14 @@ function DatosPersonales({ data, transferenciaDatos }) {
     }
 
 
-    if (id === "numeroDocumento" && validateDoc(value) === false) {
-      setDocError("El número de documento");
-    }else {
-      setDocError('')
+    if (id === "numeroDocumento") {
+      if (value.length > 10) {
+        setDocError("El número de documento excede los caracteres permitidos");
+      } else if (!validateDoc(value)) {
+        setDocError("El nombre no cumple con los caracteres permitidos.");
+      } else {
+        setDocError('');
+      }
     }
 
     copyState[id] = value;
@@ -52,23 +56,23 @@ function DatosPersonales({ data, transferenciaDatos }) {
   };
 
   const validateEmail = (email) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const emailRegex = /^(?=.{1,256}$)[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
   };
 
   const validateDoc = (doc) => {
     // Verificar que el número de documento sea un número positivo sin caracteres especiales
-    const docRegex = /^\d+$/;
+    const docRegex =/^\d{1,10}$/;
     return docRegex.test(doc) && doc >= 0;
   };
 
   const validateName = (name) => {
-    const nameRegex = /^[a-zA-Z0-9\s]{1,20}$/; 
+    const nameRegex = /^[a-zA-Z0-9\sáéíóúÁÉÍÓÚñÑ]{1,20}$/;
     return nameRegex.test(name);
   };
   
   const validateLastName = (lastName) => {
-    const lastNameRegex = /^[a-zA-Z0-9\s]{1,50}$/;
+    const lastNameRegex = /^[a-zA-Z0-9\sáéíóúÁÉÍÓÚñÑ]{1,20}$/;
     return lastNameRegex.test(lastName);
   };
   
@@ -81,15 +85,17 @@ function DatosPersonales({ data, transferenciaDatos }) {
     }
   };
 
-  const handleKeyDownOnlyLettersAndNumbers = (e) => {
+  const handleKeyDownOnlyLetters = (e) => {
     const key = e.key;
     const allowedKeys = ["Backspace", "ArrowLeft", "ArrowRight", "Delete"];
-    const regex = /^[a-zA-Z0-9\sñÑ]$/; // Letras, números, espacios, y ñ
+    // Letras con tildes, ñ y Ñ, y espacio
+    const regex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]$/; 
 
     if (!regex.test(key) && !allowedKeys.includes(key)) {
       e.preventDefault();
     }
-  };
+};
+
   
 
   return (
@@ -101,7 +107,7 @@ function DatosPersonales({ data, transferenciaDatos }) {
             type="text"
             id="nombre"
             required
-            onKeyDown={handleKeyDownOnlyLettersAndNumbers }
+            onKeyDown={handleKeyDownOnlyLetters }
             onChange={(e) => updateValuesForm(e)}
           />
            {nameError && <div style={{ color: "red", fontSize: 12 }}>{nameError}</div>}
@@ -112,7 +118,7 @@ function DatosPersonales({ data, transferenciaDatos }) {
             type="text"
             id="apellido"
             required
-            onKeyDown={handleKeyDownOnlyLettersAndNumbers }
+            onKeyDown={handleKeyDownOnlyLetters }
             onChange={(e) => updateValuesForm(e)}
           />
           {lastNameError && <div style={{ color: "red", fontSize: 12 }}>{lastNameError}</div>} 
@@ -123,7 +129,7 @@ function DatosPersonales({ data, transferenciaDatos }) {
           <Form.Text className="form-text-content">Tipo de documento</Form.Text>
           <Form.Select id="tipoDocumento" onChange={(e) => updateValuesForm(e)}>
             {tiposDocumentos.map((item, index) => (
-              <option key={index} id={item.id} value={item.id}>
+              <option key={index} id={item.tipo} value={item.id}>
                 {item.tipo}
               </option>
             ))}

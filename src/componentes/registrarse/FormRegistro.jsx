@@ -19,15 +19,18 @@ function FormRegistro() {
       const allFieldsFilled = [nombre, apellido, correo, divisa, clave, tipoDocumento, numeroDocumento, nombreUsuario].every(value => value !== '');
       const passwordPattern =  /^(?=.*[A-Z])(?=.*\d)(?=.*[^\w])[A-Za-z\d\W]{8,30}$/;
       const isValidPassword = passwordPattern.test(clave) && clave.length >= 8 && clave.length <= 30
-      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-      const isEmailValid = emailPattern.test(correo)
+      const emailPattern =/^(?=.{1,256}$)[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      const isEmailValid = emailPattern.test(correo) && correo.length<=256;
       const usernamePattern=/^[a-zA-Z0-9]{1,25}$/;
       const isValidUsername = usernamePattern.test(nombreUsuario);
-      const namePattern= /^[a-zA-Z0-9\s]{1,20}$/; 
-      const lastNamePattern=  /^[a-zA-Z0-9\s]{1,20}$/; 
+      const namePattern= /^[a-zA-Z0-9\sáéíóúÁÉÍÓÚñÑ]{1,20}$/; 
+      const lastNamePattern= /^[a-zA-Z0-9\sáéíóúÁÉÍÓÚñÑ]{1,20}$/;  
       const isValidName=namePattern.test(nombre) && nombre.length<=20;
       const isValidLastName=lastNamePattern.test(apellido) && apellido.length<=20;
-      setDisableButton(!(allFieldsFilled && isValidPassword && isEmailValid && isValidUsername && isValidName && isValidLastName))
+      const docPattern=/^\d{1,10}$/
+      const isValidDoc= docPattern.test(numeroDocumento) && numeroDocumento.length<=10;
+      setDisableButton(!(allFieldsFilled && isValidPassword && isEmailValid && isValidUsername 
+        && isValidName && isValidLastName && isValidDoc))
     }, [formValues])
 
     //console.log(formValues.numeroDocumento)
@@ -71,7 +74,7 @@ function FormRegistro() {
             <Form.Text className="form-text-content">Seleccione su divisa</Form.Text>
             <Form.Select id="divisa" onChange={(e) => updateValuesForm(e)} >
               {divisas.map((item, index) => (
-                <option key={index} id={item.id} value={item.id}>
+                <option key={index} id={item.tipo} value={item.id} >
                   {item.tipo}
                 </option>
               ))}

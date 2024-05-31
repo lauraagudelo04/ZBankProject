@@ -1,10 +1,20 @@
 export const postModel = {
     nombre: '',
     apellido: '',
-    correo: '',
-    divisa: '',
-    tipoDocumento: '',
+    tipoDocumento:  {
+        id: "",
+        nombre: "",
+        abreviacion: ""
+    },
     numeroDocumento: '',
+    divisa: {
+        id: "",
+        codigoISO: "",
+        nombre: "",
+    },
+
     nombreUsuario: '',
-    clave: ''
+    clave: '',
+    correo: '',
+
 }
