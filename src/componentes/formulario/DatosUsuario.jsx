@@ -22,7 +22,7 @@ function DatosUsuario({ data, transferenciaDatos }) {
       if (value.length > 25) {
         setUsernameError("El nombre de usuario no puede exceder los 25 caracteres.");
       } else if (!validateUsername(value)) {
-        setUsernameError("El nombre de usuario no cumple con los caracteres permitidos.");
+        setUsernameError("El nombre de usuario no cumple con los caracteres minimos permitidos(1).");
       } else {
         setUsernameError('');
       }

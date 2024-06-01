@@ -43,7 +43,7 @@ function DatosPersonales({ data, transferenciaDatos }) {
       if (value.length > 20) {
         setNameError("El nombre no puede exceder los 20 caracteres.");
       } else if (!validateName(value)) {
-        setNameError("El nombre no cumple con los caracteres minimos permitidos.");
+        setNameError("El nombre no cumple con los caracteres minimos permitidos(1).");
       } else {
         setNameError("");
       }
@@ -54,7 +54,7 @@ function DatosPersonales({ data, transferenciaDatos }) {
         setLastNameError("El apellido no puede exceder los 20 caracteres.");
       } else if (!validateLastName(value)) {
         setLastNameError(
-          "El apellido no cumple con los caracteres minimos permitidos."
+          "El apellido no cumple con los caracteres minimos permitidos(1)."
         );
       } else {
         setLastNameError("");
@@ -65,7 +65,7 @@ function DatosPersonales({ data, transferenciaDatos }) {
       if (value.length > 10) {
         setDocError("El número de documento excede los 10 caracteres permitidos");
       } else if (!validateDoc(value)) {
-        setDocError("El nombre no cumple con los caracteres minimos permitidos(1).");
+        setDocError("El número de documento no cumple con los caracteres minimos permitidos(1).");
       } else {
         setDocError("");
       }
