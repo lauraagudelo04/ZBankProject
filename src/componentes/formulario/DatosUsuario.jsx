@@ -13,7 +13,7 @@ function DatosUsuario({ data, transferenciaDatos }) {
     const { id, value } = e.target;
     
     if(id === 'clave' && validatePassword(value) === false) {
-      setPasswordError('La contraseña debe contener un mínimo de 8 caracteres a 30, un caracter especial, una mayuscula y un número')
+      setPasswordError('La contraseña debe contener un mínimo de 8 caracteres a 30, un caracter especial, una mayuscula, una minuscula y un número')
     }else {
       setPasswordError('')
     }

@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Card, Col, Form, Row, Button } from "react-bootstrap";
 import DatosPersonales from "../formulario/DatosPersonales";
-import { divisas } from "../../models/datosFormulario";
 import DatosUsuario from "../formulario/DatosUsuario";
 import { postModel } from "../../models/postModel";
-import {enviarDatos} from '../../services/ApiService'
+import {enviarDatos, obtenerDatosDivisas} from '../../services/ApiService'
 import "./Formulario.css";
 
 function FormRegistro() {
@@ -39,6 +38,15 @@ function FormRegistro() {
         setFormValues({...formValues, ...data})
     }
 
+    const [data, setData] = useState()
+    useEffect(() => {
+      async function fetch() {
+        const info = await obtenerDatosDivisas();
+        setData(info)
+      }
+      fetch();
+    },[])
+
     const updateValuesForm = (e) => {
       const copyState = { ...formValues };
       const { id, value } = e.target;
@@ -70,15 +78,21 @@ function FormRegistro() {
         <Form.Text className="container-title mb-6">Registro Usuario ZBank</Form.Text>
         <DatosPersonales data={formValues} transferenciaDatos={handleValues}/>
         <Row  className="mb-3">
-          <Col md={12}>
-            <Form.Text className="form-text-content">Seleccione su divisa</Form.Text>
-            <Form.Select id="divisa" onChange={(e) => updateValuesForm(e)} >
-              {divisas.map((item, index) => (
-                <option key={index} id={item.tipo} value={item.id} >
-                  {item.tipo}
-                </option>
-              ))}
-            </Form.Select>
+          <Col md={12}>     
+            {
+              data && (
+                <><Form.Text className="form-text-content">Seleccione su divisa</Form.Text>
+                <Form.Select id="divisa" onChange={(e) => updateValuesForm(e)} >
+                  {data.map((item, index) => (
+                    <option key={index} id={item.id} value={item.id} >
+                    {item.codigoISO} -{item.nombre}
+                    </option>
+                  ))}
+                </Form.Select>
+
+                </>
+              )
+            }
           </Col>
         </Row>
         <DatosUsuario data={formValues} transferenciaDatos={handleValues} />

@@ -1,4 +1,4 @@
-export const tiposDocumentos = [
+/*export const tiposDocumentos = [
   {
     id:'',
     tipo: '--Seleccione un tipo de documento --'
@@ -16,8 +16,14 @@ export const tiposDocumentos = [
     tipo: "Tarjeta de identidad",
   },
   {
-    id: "CE",
+    id: "4d2319ff-fd46-4d4f-9314-5a643bf49f35",
     tipo: "Cédula de extranjería",
+
+  },
+  {
+    id: "4d2319ab-fd46-4d4f-9314-5a643bf49f35",
+    tipo: "Cranjería",
+
   },
 ];
 
@@ -47,4 +53,4 @@ export const divisas = [
     id: "52670e7f-8565-4b13-b268-8287e0ab79c9",
     tipo: "Peso Argentino",
   },
-];
+];*/
