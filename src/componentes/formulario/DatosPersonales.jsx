@@ -8,16 +8,25 @@ function DatosPersonales({ data, transferenciaDatos }) {
   const [nameError, setNameError] = useState("");
   const [lastNameError, setLastNameError] = useState("");
   const items = data;
-
-  const [dataTiposDocumentos, setDataTiposDocumentos] = useState();
+  const [dataTiposDocumentos, setDataTiposDocumentos] = useState([]);
+  
   useEffect(() => {
     async function fetch() {
-      const info = await obtenerDatosTiposDocumentos();
-      setDataTiposDocumentos(info);
+      try {
+        const info = await obtenerDatosTiposDocumentos();
+        setDataTiposDocumentos(info);
+        if (info && info.length > 0 && !items.tipoDocumento.id) {
+          transferenciaDatos({
+            ...items,
+            tipoDocumento: { id: info[0].id, nombre: info[0].nombre, abreviacion: info[0].abreviacion }
+          });
+        }
+      } catch (error) {
+        console.log(error);
+      }
     }
     fetch();
-  }, []);
-
+  }, [items, transferenciaDatos]);
   const updateValuesForm = (e) => {
     const { id, value } = e.target;
     const copyState = { ...items };

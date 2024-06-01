@@ -34,7 +34,7 @@ function DatosUsuario({ data, transferenciaDatos }) {
 
   const validatePassword = (password) => {
      // Validar la contraseña: mínimo 8 caracteres, máximo 30, mínimo una mayúscula, un número y un carácter especial
-    const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[^\w])[A-Za-z\d\W]{8,30}$/;
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\w])[A-Za-z\d\W]{8,30}$/
     return passwordRegex.test(password);
   };
 

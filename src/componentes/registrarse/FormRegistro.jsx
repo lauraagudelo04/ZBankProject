@@ -11,12 +11,12 @@ function FormRegistro() {
     const [formValues, setFormValues] = useState(postModel)
     const [postStatus, setPostStatus] = useState([])
     const [disableButton, setDisableButton] = useState(false)
-
+    const [data, setData] = useState([]);
     useEffect(() => {
 
       const { nombre, apellido, correo, divisa, clave, tipoDocumento, numeroDocumento, nombreUsuario } = formValues;  
       const allFieldsFilled = [nombre, apellido, correo, divisa, clave, tipoDocumento, numeroDocumento, nombreUsuario].every(value => value !== '');
-      const passwordPattern =  /^(?=.*[A-Z])(?=.*\d)(?=.*[^\w])[A-Za-z\d\W]{8,30}$/;
+      const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\w])[A-Za-z\d\W]{8,30}$/;
       const isValidPassword = passwordPattern.test(clave) && clave.length >= 8 && clave.length <= 30
       const emailPattern =/^(?=.{1,256}$)[^\s@]+@[^\s@]+\.[^\s@]+$/;
       const isEmailValid = emailPattern.test(correo) && correo.length<=256;
@@ -38,14 +38,24 @@ function FormRegistro() {
         setFormValues({...formValues, ...data})
     }
 
-    const [data, setData] = useState()
+
     useEffect(() => {
       async function fetch() {
-        const info = await obtenerDatosDivisas();
-        setData(info)
+        try {
+          const info = await obtenerDatosDivisas();
+          setData(info);
+          if (info && info.length > 0 && !formValues.divisa.id) {
+            setFormValues(prevValues => ({
+              ...prevValues,
+              divisa: { id: info[0].id, codigoISO: info[0].codigoISO, nombre: info[0].nombre }
+            }));
+          }
+        } catch (error) {
+          console.log(error);
+        }
       }
       fetch();
-    },[])
+    }, []);
 
     const updateValuesForm = (e) => {
       const copyState = { ...formValues };
@@ -61,12 +71,13 @@ function FormRegistro() {
         console.log(response)
         setPostStatus(response)
         // alert(`${postStatus.Message}`) SOLO FORMA BASE, VERIFICAR LA RESPUESTA
-        alert('Se registró el usuario exitosamente.')
-        window.location.reload()
+        alert(response.mensajes.join(', '))
+        //window.location.reload()
         setDisableButton(false)           
       }catch(error){
         setPostStatus(error)
-        alert('Se presentó un error al registrar el usuario.')
+        //console.log(error.response.data.mensajes[0])
+        alert(error.response.data.mensajes.join(', '))
         //window.location.reload()
         setDisableButton(false)        
       }
