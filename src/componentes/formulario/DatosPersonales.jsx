@@ -10,7 +10,7 @@ function DatosPersonales({ data, transferenciaDatos }) {
   const items = data;
   const [dataTiposDocumentos, setDataTiposDocumentos] = useState([]);
   
-  useEffect(() => {
+  /*useEffect(() => {
     async function fetch() {
       try {
         const info = await obtenerDatosTiposDocumentos();
@@ -27,6 +27,17 @@ function DatosPersonales({ data, transferenciaDatos }) {
     }
     fetch();
   }, [items, transferenciaDatos]);
+
+  */
+
+  useEffect(() => {
+    async function fetch() {
+      const info = await obtenerDatosTiposDocumentos();
+      setDataTiposDocumentos(info);
+    }
+    fetch();
+  }, []);
+  
   const updateValuesForm = (e) => {
     const { id, value } = e.target;
     const copyState = { ...items };

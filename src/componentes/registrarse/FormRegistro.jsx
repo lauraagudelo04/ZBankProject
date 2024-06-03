@@ -39,7 +39,7 @@ function FormRegistro() {
     }
 
 
-    useEffect(() => {
+   /* useEffect(() => {
       async function fetch() {
         try {
           const info = await obtenerDatosDivisas();
@@ -55,7 +55,15 @@ function FormRegistro() {
         }
       }
       fetch();
-    }, []);
+    }, []);*/
+
+    useEffect(() => {
+      async function fetch() {
+        const info = await obtenerDatosDivisas();
+        setData(info)
+      }
+      fetch();
+    },[])
 
     const updateValuesForm = (e) => {
       const copyState = { ...formValues };
